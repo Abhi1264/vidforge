@@ -1,5 +1,10 @@
 # VidForge — Universal Video Downloader
 
+![Go Version](https://img.shields.io/badge/go-1.25.5-blue.svg)
+![GitHub Release](https://img.shields.io/github/v/release/Abhi1264/vidforge)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Homebrew](https://img.shields.io/homebrew/v/vidforge)
+
 VidForge is a terminal-based video downloader application written in Go that provides an intuitive TUI (Terminal User Interface) for downloading videos from various platforms using `yt-dlp` as the backend. It features concurrent download management, quality profiles, SponsorBlock integration, and cross-platform support.
 
 ## Features
@@ -15,12 +20,17 @@ VidForge is a terminal-based video downloader application written in Go that pro
 
 ## Installation
 
-### Prerequisites
+### Homebrew (macOS/Linux)
 
-- Go 1.25.5 or later
-- Homebrew (macOS), apt-get/dnf/pacman (Linux), or PowerShell (Windows) for automatic dependency installation
+```bash
+brew install vidforge
+```
 
 ### Build from Source
+
+**Prerequisites:**
+- Go 1.25.5 or later
+- Homebrew (macOS), apt-get/dnf/pacman (Linux), or PowerShell (Windows) for automatic dependency installation
 
 ```bash
 git clone https://github.com/Abhi1264/vidforge.git
@@ -193,9 +203,9 @@ Core download functionality:
   - Profile selection by quality string
   - Default profile selection
 
-- **`formats.go`**: Format listing
+- **`formats.go`**: Format listing utility
   - Parses `yt-dlp -F` output
-  - Returns available formats for a URL
+  - Returns available formats for a URL (not currently used in UI)
 
 - **`url.go`**: URL utilities
   - YouTube URL detection
@@ -231,7 +241,7 @@ Terminal user interface built with Bubbletea:
 
 - **`help.go`**: Help text content
 
-- **`formats.go`**: Format list item implementation for Bubbletea lists
+- **`formats.go`**: Format list item type definition for Bubbletea lists (utility type)
 
 ### Data Flow
 
@@ -284,14 +294,10 @@ go build -o vidforge ./cmd/vidforge
 
 ### Testing
 
-While no formal tests are included, you can test individual components:
+Run the application to test:
 
 ```bash
-# Test dependency detection
-go run ./cmd/vidforge  # Will check for yt-dlp and ffmpeg
-
-# Test format listing (requires yt-dlp)
-go run -c 'import "github.com/Abhi1264/vidforge/internal/downloader"; ...'
+go run ./cmd/vidforge
 ```
 
 ### Adding New Profiles
@@ -346,7 +352,7 @@ Potential improvements:
 
 ## License
 
-This project appears to be open source. Please check with the repository owner for specific licensing information.
+This project is licensed under the MIT License.
 
 ## Contributing
 
