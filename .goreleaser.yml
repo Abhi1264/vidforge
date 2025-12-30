@@ -30,6 +30,9 @@ checksum:
 changelog:
   disable: true
 
+ldflags:
+  - -s -w -X main.version={{ .Version }}
+
 brews:
   - name: vidforge
     homepage: https://github.com/Abhi1264/vidforge
