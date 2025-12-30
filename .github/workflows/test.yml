@@ -65,10 +65,11 @@ jobs:
         run: go test -race ./...
 
       - name: Dependency detection test
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           echo "Simulating missing yt-dlp and ffmpeg"
-          PATH="/nonexistent:$PATH" go run ./cmd/vidforge --help || true
+          PATH="/nonexistent:$PATH" go run ./cmd/vidforge --version
 
       - name: Cross-compile (no run)
         if: runner.os == 'Linux'
