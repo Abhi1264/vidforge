@@ -24,7 +24,7 @@ builds:
       - arm64
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz, zip]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
@@ -33,7 +33,7 @@ checksum:
 changelog:
   disable: true
 
-brews:
+homebrew:
   - name: vidforge
     homepage: https://github.com/Abhi1264/vidforge
     description: Terminal-based universal video downloader
