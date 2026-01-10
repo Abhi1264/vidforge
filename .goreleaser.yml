@@ -5,7 +5,6 @@ project_name: vidforge
 before:
   hooks:
     - go mod tidy
-    - bash scripts/download-binaries.sh
 
 builds:
   - id: vidforge
@@ -24,7 +23,11 @@ builds:
       - arm64
 
 archives:
-  - formats: [tar.gz]
+  - id: vidforge-archive
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
@@ -34,7 +37,9 @@ changelog:
   disable: true
 
 brews:
-  - name: vidforge
+  - ids:
+      - vidforge-archive
+    name: vidforge
     homepage: https://github.com/Abhi1264/vidforge
     description: Terminal-based universal video downloader
     license: MIT
@@ -43,8 +48,12 @@ brews:
       owner: Abhi1264
       name: homebrew-tap
 
+    dependencies:
+      - name: yt-dlp
+      - name: ffmpeg
+
     install: |
       bin.install "vidforge"
 
     test: |
-      system "#{bin}/vidforge", "--help"
+      system "#{bin}/vidforge", "--version"

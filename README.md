@@ -15,10 +15,40 @@ VidForge is a terminal-based video downloader application written in Go that pro
 - 🎚️ **Quality Profiles**: Pre-configured profiles for different use cases (Best Quality, High Quality, Balanced, Mobile Saver, Audio Only, Archive)
 - 🚫 **SponsorBlock Integration**: Automatically removes sponsor segments from YouTube videos
 - 🔄 **Resume Support**: Automatically resumes interrupted downloads
-- 📦 **Self-Contained**: Includes embedded `yt-dlp` and `ffmpeg` binaries - no external dependencies required
+- 🔧 **Simple Setup**: Requires `yt-dlp` and `ffmpeg` - both widely available via package managers
 - 🖥️ **Cross-Platform**: Works on macOS, Linux, and Windows
 
 ## Installation
+
+### Prerequisites
+
+VidForge requires `yt-dlp` and `ffmpeg` to be installed on your system:
+
+**macOS:**
+```bash
+brew install yt-dlp ffmpeg
+```
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt update
+sudo apt install yt-dlp ffmpeg
+```
+
+**Linux (Fedora):**
+```bash
+sudo dnf install yt-dlp ffmpeg
+```
+
+**Linux (Arch):**
+```bash
+sudo pacman -S yt-dlp ffmpeg
+```
+
+**Windows:**
+- Download yt-dlp: https://github.com/yt-dlp/yt-dlp/releases
+- Download ffmpeg: https://ffmpeg.org/download.html
+- Add both to your PATH
 
 ### Homebrew (macOS/Linux)
 
@@ -26,13 +56,15 @@ VidForge is a terminal-based video downloader application written in Go that pro
 brew install vidforge
 ```
 
+This will automatically install `yt-dlp` and `ffmpeg` as dependencies.
+
 ### Download from GitHub Releases
 
 Download the pre-built binary for your platform from the [Releases](https://github.com/Abhi1264/vidforge/releases) page:
 
 - **macOS**: `vidforge_*_darwin_amd64.tar.gz` or `vidforge_*_darwin_arm64.tar.gz`
 - **Linux**: `vidforge_*_linux_amd64.tar.gz` or `vidforge_*_linux_arm64.tar.gz`
-- **Windows**: `vidforge_*_windows_amd64.tar.gz` or `vidforge_*_windows_arm64.tar.gz`
+- **Windows**: `vidforge_*_windows_amd64.zip` or `vidforge_*_windows_arm64.zip`
 
 Extract and run:
 ```bash
@@ -44,34 +76,23 @@ tar -xzf vidforge_*_linux_amd64.tar.gz
 
 **Prerequisites:**
 - Go 1.25.5 or later
-- `curl` or `wget` for downloading embedded binaries
+- `yt-dlp` and `ffmpeg` installed on your system
 
 ```bash
 git clone https://github.com/Abhi1264/vidforge.git
 cd vidforge
-
-# Download embedded binaries (required before building)
-bash scripts/download-binaries.sh
-
-# Build the binary
 go build -o vidforge ./cmd/vidforge
 ./vidforge
 ```
 
-**Note**: The `download-binaries.sh` script downloads `yt-dlp` and `ffmpeg` binaries for all platforms, which are then embedded into the Go binary during compilation. This ensures the final binary is self-contained and doesn't require external dependencies.
-
 ### Dependencies
 
-VidForge includes embedded binaries for `yt-dlp` and `ffmpeg`, so **no external dependencies are required**. The binaries are automatically extracted to a local `bin` directory on first run.
+VidForge requires two external dependencies to be installed on your system:
 
-**How it works:**
-1. On first launch, VidForge checks if `yt-dlp` and `ffmpeg` are available in your system PATH
-2. If not found, it extracts the embedded binaries to `{app_directory}/bin/`
-3. The extracted binaries are used for all download operations
+- **yt-dlp**: Video downloader backend
+- **ffmpeg**: Media processing tool
 
-**Fallback behavior:**
-- If you have system-installed versions of `yt-dlp` or `ffmpeg` in your PATH, those will be used instead
-- This allows you to use updated versions if you prefer
+These must be installed and available in your system PATH before running VidForge. See the [Prerequisites](#prerequisites) section for installation instructions.
 
 ## Usage
 
@@ -192,13 +213,12 @@ vidforge/
 
 #### 1. Bootstrap Package (`internal/bootstrap`)
 
-Handles dependency management and binary extraction:
+Handles dependency verification:
 
-- **`deps.go`**: Manages embedded binaries and extraction
-  - Embeds `yt-dlp` and `ffmpeg` binaries for all platforms
-  - Extracts binaries to local directory on first run
-  - Checks system PATH first, falls back to embedded binaries
-  - Platform-specific binary selection based on OS and architecture
+- **`deps.go`**: Checks for required dependencies
+  - Verifies `yt-dlp` and `ffmpeg` are available in system PATH
+  - Provides helpful error messages with installation instructions
+  - Returns full path to executables for use by downloader
 
 - **`os.go`**: OS and architecture detection utilities
   - `DetectOS()`: Returns current OS and architecture
@@ -269,10 +289,10 @@ Terminal user interface built with Bubbletea:
 ### Data Flow
 
 1. **Initialization**:
-   - `main.go` ensures dependencies are available via `bootstrap.Ensure()`
-   - Extracts embedded binaries if system versions aren't found
+   - `main.go` verifies dependencies are available via `bootstrap.Ensure()`
+   - Exits with helpful error message if `yt-dlp` or `ffmpeg` not found
    - Creates a new Bubbletea program with `ui.NewModel()`
-   - Initializes download manager with 10 worker goroutines
+   - Initializes download manager with 3 worker goroutines
 
 2. **Download Submission**:
    - User enters URL and presses Enter
@@ -282,7 +302,7 @@ Terminal user interface built with Bubbletea:
 
 3. **Download Execution**:
    - Worker goroutine uses `bootstrap.GetCommandPath()` to locate `yt-dlp`
-   - Executes `yt-dlp` command (from PATH or extracted binary) with appropriate flags
+   - Executes `yt-dlp` command from system PATH with appropriate flags
    - Progress is parsed from stdout using regex
    - Progress updates are sent via channel to the UI model
 
@@ -296,7 +316,7 @@ Terminal user interface built with Bubbletea:
 VidForge uses a worker pool pattern for concurrent downloads:
 
 - **Download Manager**: Maintains a channel-based queue of jobs
-- **Worker Goroutines**: 10 workers process jobs concurrently
+- **Worker Goroutines**: 3 workers process jobs concurrently
 - **Progress Channel**: Single channel for all progress updates
 - **Context Cancellation**: Each job has a context for cancellation support
 
@@ -304,7 +324,7 @@ VidForge uses a worker pool pattern for concurrent downloads:
 
 VidForge uses sensible defaults and doesn't require configuration files:
 
-- **Concurrent Downloads**: 10 workers (configurable in `ui/model.go`)
+- **Concurrent Downloads**: 3 workers (configurable in `ui/model.go`)
 - **Default Profile**: Balanced (720p, H.264, MP4)
 - **SponsorBlock**: Enabled by default for YouTube URLs
 - **Resume**: Enabled by default for all downloads
@@ -348,18 +368,15 @@ Edit `internal/downloader/profile.go` and add a new `Profile` to the `profiles` 
 - `github.com/charmbracelet/bubbles`: UI components (textinput)
 - `github.com/charmbracelet/lipgloss`: Terminal styling
 
-Embedded dependencies (included in binary):
-- `yt-dlp`: Video downloader (embedded for all platforms)
-- `ffmpeg`: Media processing (embedded for all platforms)
-
-These are automatically extracted on first run if not found in system PATH.
+External dependencies (must be installed):
+- `yt-dlp`: Video downloader backend
+- `ffmpeg`: Media processing tool
 
 ## Limitations
 
 1. **Format Selection**: Currently uses profiles only; manual format selection not available
 3. **Error Handling**: Basic error display; detailed error recovery may need improvement
-4. **Concurrent Workers**: Fixed at 10 workers (configurable in code)
-5. **Binary Size**: The final binary is larger (~50-100MB) due to embedded dependencies
+3. **Concurrent Workers**: Fixed at 3 workers (configurable in code)
 
 ## Future Enhancements
 
@@ -374,7 +391,7 @@ Potential improvements:
 - [ ] Better error messages and recovery
 - [ ] Download speed indicators
 - [ ] ETA calculation and display
-- [ ] Optional: Use system-installed binaries by default (flag to prefer embedded)
+- [ ] Auto-update checking for newer versions
 
 ## License
 

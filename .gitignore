@@ -23,8 +23,5 @@ Thumbs.db
 coverage.*
 *.coverprofile
 
-internal/bootstrap/binaries/**/*.zip
-internal/bootstrap/binaries/**/*.tar.xz
-internal/bootstrap/binaries/**/*.dylib
-internal/bootstrap/binaries/**/*.md
-internal/bootstrap/binaries/**/*.txt
+# Binaries directory (no longer embedded)
+internal/bootstrap/binaries/

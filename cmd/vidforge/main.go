@@ -28,17 +28,10 @@ func main() {
 	}
 
 	if err := bootstrap.Ensure("yt-dlp"); err != nil {
-		log.Fatalf("Failed to ensure yt-dlp is available: %v\nPlease ensure yt-dlp is installed or the binary contains embedded dependencies.", err)
+		log.Fatal(err)
 	}
 	if err := bootstrap.Ensure("ffmpeg"); err != nil {
-		log.Fatalf("Failed to ensure ffmpeg is available: %v\nPlease ensure ffmpeg is installed or the binary contains embedded dependencies.", err)
-	}
-
-	if _, err := bootstrap.GetCommandPath("yt-dlp"); err != nil {
-		log.Fatalf("yt-dlp not found after installation attempt: %v", err)
-	}
-	if _, err := bootstrap.GetCommandPath("ffmpeg"); err != nil {
-		log.Fatalf("ffmpeg not found after installation attempt: %v", err)
+		log.Fatal(err)
 	}
 
 	p := tea.NewProgram(

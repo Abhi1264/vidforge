@@ -48,9 +48,22 @@ jobs:
       - name: Go vet
         run: go vet ./...
 
-      - name: Download embedded binaries
-        run: bash scripts/download-binaries.sh
-        continue-on-error: true
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yt-dlp ffmpeg
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install yt-dlp ffmpeg
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install yt-dlp ffmpeg -y
 
       - name: Build VidForge
         run: go build -v ./cmd/vidforge
@@ -72,15 +85,15 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          echo "Testing embedded binary extraction"
-          bash scripts/download-binaries.sh || true
+          echo "Testing dependency detection"
+          # Build binary
           go build -v ./cmd/vidforge
-          PATH="/nonexistent:$PATH" ./vidforge --version
+          # Should work with dependencies installed
+          ./vidforge --version
 
       - name: Cross-compile (no run)
         if: runner.os == 'Linux'
         run: |
-          bash scripts/download-binaries.sh || true
           GOOS=windows GOARCH=amd64 go build -o vidforge-win.exe ./cmd/vidforge
           GOOS=linux GOARCH=arm64 go build -o vidforge-linux-arm64 ./cmd/vidforge
 
