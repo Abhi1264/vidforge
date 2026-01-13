@@ -5,405 +5,185 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Homebrew](https://img.shields.io/homebrew/v/vidforge)
 
-VidForge is a terminal-based video downloader application written in Go that provides an intuitive TUI (Terminal User Interface) for downloading videos from various platforms using `yt-dlp` as the backend. It features concurrent download management, quality profiles, SponsorBlock integration, and cross-platform support.
+VidForge is a beautiful terminal-based video downloader that supports 1000+ platforms including YouTube, Vimeo, Twitter, TikTok, and many more. Built with Go and powered by `yt-dlp`.
 
-## Features
+![VidForge Demo](https://via.placeholder.com/800x400?text=VidForge+Demo)
 
-- 🎬 **Universal Video Downloading**: Supports all platforms that `yt-dlp` supports (YouTube, Vimeo, Twitter, TikTok, and 1000+ more)
-- 🎨 **Beautiful TUI**: Modern terminal interface built with Bubbletea
-- 📊 **Concurrent Downloads**: Download multiple videos simultaneously (up to 10 concurrent jobs)
-- 🎚️ **Quality Profiles**: Pre-configured profiles for different use cases (Best Quality, High Quality, Balanced, Mobile Saver, Audio Only, Archive)
-- 🚫 **SponsorBlock Integration**: Automatically removes sponsor segments from YouTube videos
-- 🔄 **Resume Support**: Automatically resumes interrupted downloads
-- 🔧 **Simple Setup**: Requires `yt-dlp` and `ffmpeg` - both widely available via package managers
+## ✨ Features
+
+- 🎬 **Universal Support**: Download from YouTube, Vimeo, Twitter, TikTok, and 1000+ platforms
+- 🎨 **Beautiful Interface**: Modern, intuitive terminal UI
+- 📊 **Concurrent Downloads**: Download multiple videos simultaneously
+- 🎚️ **Quality Profiles**: Pre-configured profiles for different use cases
+- 🚫 **SponsorBlock**: Automatically skip sponsor segments on YouTube
+- 🔄 **Smart Resume**: Automatically resume interrupted downloads
+- 📁 **Custom Locations**: Choose where to save your downloads
 - 🖥️ **Cross-Platform**: Works on macOS, Linux, and Windows
 
-## Installation
+## 📦 Installation
 
-### Prerequisites
+### Quick Install (Recommended)
 
-VidForge requires `yt-dlp` and `ffmpeg` to be installed on your system:
+**macOS / Linux (Homebrew):**
+```bash
+brew tap Abhi1264/homebrew-tap
+brew install vidforge
+```
+
+**Windows (Scoop):**
+```powershell
+scoop bucket add vidforge https://github.com/Abhi1264/vidforge-scoop
+scoop install vidforge
+```
+
+### Download from GitHub Releases
+
+1. Download the latest release for your platform from the [Releases](https://github.com/Abhi1264/vidforge/releases) page
+2. Extract the archive
+3. Run vidforge
+
+**Note:** VidForge will automatically offer to download `yt-dlp` on first run if it's not installed. You'll need to install `ffmpeg` separately:
 
 **macOS:**
 ```bash
-brew install yt-dlp ffmpeg
+brew install ffmpeg
 ```
 
 **Linux (Debian/Ubuntu):**
 ```bash
-sudo apt update
-sudo apt install yt-dlp ffmpeg
+sudo apt install ffmpeg
 ```
 
 **Linux (Fedora):**
 ```bash
-sudo dnf install yt-dlp ffmpeg
+sudo dnf install ffmpeg
 ```
 
 **Linux (Arch):**
 ```bash
-sudo pacman -S yt-dlp ffmpeg
+sudo pacman -S ffmpeg
 ```
 
 **Windows:**
-- Download yt-dlp: https://github.com/yt-dlp/yt-dlp/releases
-- Download ffmpeg: https://ffmpeg.org/download.html
-- Add both to your PATH
+Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to PATH
 
-### Homebrew (macOS/Linux)
+## 🚀 Quick Start
 
-```bash
-brew install vidforge
-```
+1. Launch VidForge:
+   ```bash
+   vidforge
+   ```
 
-This will automatically install `yt-dlp` and `ffmpeg` as dependencies.
+2. Paste a video URL and press Enter
 
-### Download from GitHub Releases
+3. Watch your download progress in real-time!
 
-Download the pre-built binary for your platform from the [Releases](https://github.com/Abhi1264/vidforge/releases) page:
-
-- **macOS**: `vidforge_*_darwin_amd64.tar.gz` or `vidforge_*_darwin_arm64.tar.gz`
-- **Linux**: `vidforge_*_linux_amd64.tar.gz` or `vidforge_*_linux_arm64.tar.gz`
-- **Windows**: `vidforge_*_windows_amd64.zip` or `vidforge_*_windows_arm64.zip`
-
-Extract and run:
-```bash
-tar -xzf vidforge_*_linux_amd64.tar.gz
-./vidforge
-```
-
-### Build from Source
-
-**Prerequisites:**
-- Go 1.25.5 or later
-- `yt-dlp` and `ffmpeg` installed on your system
-
-```bash
-git clone https://github.com/Abhi1264/vidforge.git
-cd vidforge
-go build -o vidforge ./cmd/vidforge
-./vidforge
-```
-
-### Dependencies
-
-VidForge requires two external dependencies to be installed on your system:
-
-- **yt-dlp**: Video downloader backend
-- **ffmpeg**: Media processing tool
-
-These must be installed and available in your system PATH before running VidForge. See the [Prerequisites](#prerequisites) section for installation instructions.
-
-## Usage
-
-### Starting VidForge
-
-Simply run the executable:
-
-```bash
-./vidforge
-```
-
-### Basic Workflow
-
-1. **Enter a URL**: Type or paste a video URL in the input field
-2. **Press Enter**: Start the download
-3. **Monitor Progress**: Watch real-time progress bars for each download
-4. **Manage Downloads**: Navigate between downloads, pause/cancel, or change settings
-
-### Keyboard Shortcuts
+## ⌨️ Keyboard Shortcuts
 
 | Key | Action |
 |-----|--------|
-| `Enter` | Start download with the entered URL |
-| `↑` / `↓` or `j` / `k` | Navigate between download jobs |
-| `p` | Pause/cancel the selected download |
-| `s` | Toggle SponsorBlock (YouTube only) |
-| `f` | Open profile selection menu |
-| `?` | Toggle help screen |
-| `q` / `Ctrl+C` | Quit the application |
+| `Enter` | Start download |
+| `↑` / `↓` or `j` / `k` | Navigate downloads |
+| `p` | Pause/cancel selected download |
+| `s` | Toggle SponsorBlock (YouTube) |
+| `f` | Change quality profile |
+| `d` | Set download location |
+| `?` | Show help |
+| `q` / `Ctrl+C` | Quit |
 
-### Download Profiles
+## 🎚️ Quality Profiles
 
-VidForge includes 6 pre-configured download profiles optimized for different use cases:
+VidForge includes 6 pre-configured quality profiles:
 
-1. **Best Quality** (`best`)
-   - 4K/8K resolution
-   - VP9/AV1 video codec + Opus audio
-   - MKV container format
-   - Best available quality
+1. **Best Quality** - 4K/8K, VP9/AV1, MKV format
+2. **High Quality** - 1080p, H.264, MP4 format
+3. **Balanced** - 720p, H.264, MP4 format (default)
+4. **Mobile Saver** - ≤720p, low bitrate, MP4 format
+5. **Audio Only** - Extract audio as MP3
+6. **Archive** - Best quality + metadata + subtitles
 
-2. **High Quality** (`high`)
-   - 1080p resolution
-   - H.264 video codec + AAC audio
-   - MP4 container format
-   - Good balance of quality and compatibility
+Press `f` to switch between profiles, or use number keys 1-6 for quick selection.
 
-3. **Balanced** (`good`) - Default
-   - 720p resolution
-   - H.264 video codec + AAC audio
-   - MP4 container format
-   - Optimal for most use cases
+## 🚫 SponsorBlock Integration
 
-4. **Mobile Saver** (`mobile`)
-   - ≤720p resolution
-   - H.264 video codec
-   - MP4 container format
-   - Low bitrate for mobile devices
-
-5. **Audio Only** (`audio`)
-   - Opus/MP3 format
-   - 160-320 kbps bitrate
-   - Extracts audio only
-
-6. **Archive** (`archive`)
-   - Best video + best audio
-   - Includes metadata, thumbnails, and subtitles
-   - MKV container format
-   - Complete archival package
-
-To change profiles:
-- Press `f` to open the profile selection menu
-- Use `↑`/`↓` to navigate or press `1-6` to select directly
-- Press `Enter` to confirm
-
-### SponsorBlock
-
-VidForge includes SponsorBlock integration for YouTube videos. When enabled (default), it automatically removes:
+VidForge automatically removes sponsor segments from YouTube videos:
 - Sponsor segments
-- Self-promotion segments
-- Interaction requests
-- Intro segments
-- Outro segments
+- Self-promotion
+- Interaction requests (like/subscribe)
+- Intro and outro segments
 
-Toggle with the `s` key. SponsorBlock is automatically enabled for YouTube URLs and disabled for other platforms.
+Toggle with the `s` key. Automatically enabled for YouTube URLs.
 
-## Architecture
+## 📁 Custom Download Location
 
-### Project Structure
+Press `d` to set a custom download location. Supports:
+- Absolute paths: `/path/to/downloads`
+- Relative paths: `./videos`
+- Home directory: `~/Downloads`
 
-```
-vidforge/
-├── cmd/
-│   └── vidforge/
-│       └── main.go          # Application entry point
-├── internal/
-│   ├── bootstrap/
-│   │   ├── deps.go          # Dependency installation logic
-│   │   └── os.go            # OS detection utilities
-│   ├── downloader/
-│   │   ├── formats.go       # Format listing functionality
-│   │   ├── job.go           # Download job execution
-│   │   ├── manager.go       # Concurrent download manager
-│   │   ├── profile.go       # Quality profiles
-│   │   └── url.go           # URL validation utilities
-│   └── ui/
-│       ├── formats.go       # Format list item implementation
-│       ├── help.go          # Help text
-│       ├── model.go         # Bubbletea model (state)
-│       ├── styles.go        # UI styling
-│       ├── update.go        # Event handling (update logic)
-│       └── view.go          # UI rendering
-├── go.mod
-├── go.sum
-└── README.md
-```
+The location is saved for future downloads.
 
-### Core Components
+## 🔧 Troubleshooting
 
-#### 1. Bootstrap Package (`internal/bootstrap`)
+### "yt-dlp not found"
 
-Handles dependency verification:
+VidForge will offer to download yt-dlp automatically on first run. If this fails, install manually:
 
-- **`deps.go`**: Checks for required dependencies
-  - Verifies `yt-dlp` and `ffmpeg` are available in system PATH
-  - Provides helpful error messages with installation instructions
-  - Returns full path to executables for use by downloader
-
-- **`os.go`**: OS and architecture detection utilities
-  - `DetectOS()`: Returns current OS and architecture
-  - `IsMacOS()`, `IsLinux()`, `IsWindows()`: Platform checks
-  - `IsIntel()`, `IsARM()`: Architecture checks
-
-#### 2. Downloader Package (`internal/downloader`)
-
-Core download functionality:
-
-- **`manager.go`**: Concurrent download manager
-  - Manages a queue of download jobs
-  - Supports multiple concurrent downloads (configurable workers)
-  - Provides progress updates via channels
-  - Supports job cancellation
-
-- **`job.go`**: Individual download job execution
-  - Runs `yt-dlp` processes
-  - Parses progress output using regex
-  - Handles context cancellation
-  - Supports resume functionality
-
-- **`profile.go`**: Download quality profiles
-  - Pre-defined quality profiles with yt-dlp flags
-  - Profile selection by quality string
-  - Default profile selection
-
-- **`formats.go`**: Format listing utility
-  - Parses `yt-dlp -F` output
-  - Returns available formats for a URL (not currently used in UI)
-
-- **`url.go`**: URL utilities
-  - YouTube URL detection
-  - Platform-specific handling
-
-#### 3. UI Package (`internal/ui`)
-
-Terminal user interface built with Bubbletea:
-
-- **`model.go`**: Application state
-  - Text input for URLs
-  - Job tracking (map of job states)
-  - Profile selection state
-  - SponsorBlock toggle state
-  - Help/profile menu visibility
-
-- **`update.go`**: Event handling
-  - Keyboard input processing
-  - Progress updates from download manager
-  - State transitions
-  - Job submission logic
-
-- **`view.go`**: UI rendering
-  - Main view rendering
-  - Progress bar rendering
-  - Profile selection view
-  - Help screen rendering
-  - Job list rendering
-
-- **`styles.go`**: UI styling
-  - Lipgloss styles for different UI elements
-  - Color schemes and formatting
-
-- **`help.go`**: Help text content
-
-- **`formats.go`**: Format list item type definition for Bubbletea lists (utility type)
-
-### Data Flow
-
-1. **Initialization**:
-   - `main.go` verifies dependencies are available via `bootstrap.Ensure()`
-   - Exits with helpful error message if `yt-dlp` or `ffmpeg` not found
-   - Creates a new Bubbletea program with `ui.NewModel()`
-   - Initializes download manager with 3 worker goroutines
-
-2. **Download Submission**:
-   - User enters URL and presses Enter
-   - Model validates URL and creates a new job
-   - Job is submitted to the download manager queue
-   - Manager assigns job to an available worker
-
-3. **Download Execution**:
-   - Worker goroutine uses `bootstrap.GetCommandPath()` to locate `yt-dlp`
-   - Executes `yt-dlp` command from system PATH with appropriate flags
-   - Progress is parsed from stdout using regex
-   - Progress updates are sent via channel to the UI model
-
-4. **UI Updates**:
-   - UI listens to progress channel
-   - Model updates job states on progress messages
-   - View re-renders with updated progress bars and status
-
-### Concurrency Model
-
-VidForge uses a worker pool pattern for concurrent downloads:
-
-- **Download Manager**: Maintains a channel-based queue of jobs
-- **Worker Goroutines**: 3 workers process jobs concurrently
-- **Progress Channel**: Single channel for all progress updates
-- **Context Cancellation**: Each job has a context for cancellation support
-
-## Configuration
-
-VidForge uses sensible defaults and doesn't require configuration files:
-
-- **Concurrent Downloads**: 3 workers (configurable in `ui/model.go`)
-- **Default Profile**: Balanced (720p, H.264, MP4)
-- **SponsorBlock**: Enabled by default for YouTube URLs
-- **Resume**: Enabled by default for all downloads
-
-## Development
-
-### Building
-
+**macOS:**
 ```bash
-go build -o vidforge ./cmd/vidforge
+brew install yt-dlp
 ```
 
-### Testing
-
-Run the application to test:
-
+**Linux:**
 ```bash
-go run ./cmd/vidforge
+# Ubuntu/Debian
+sudo apt install yt-dlp
+
+# Or use pip
+pip install yt-dlp
 ```
 
-### Adding New Profiles
+**Windows:**
+Download from [yt-dlp releases](https://github.com/yt-dlp/yt-dlp/releases) and add to PATH
 
-Edit `internal/downloader/profile.go` and add a new `Profile` to the `profiles` slice:
+### "ffmpeg not found"
 
-```go
-{
-    Name:        "Custom Profile",
-    Specs:       "Your specs description",
-    Quality:     "custom",
-    Description: "Full description",
-    Flags: []string{
-        "-f", "your-format-string",
-        "--merge-output-format", "mp4",
-    },
-}
-```
+ffmpeg must be installed manually. See the [Installation](#-installation) section above.
 
-### Dependencies
+### Download Failed
 
-- `github.com/charmbracelet/bubbletea`: TUI framework
-- `github.com/charmbracelet/bubbles`: UI components (textinput)
-- `github.com/charmbracelet/lipgloss`: Terminal styling
+- Check your internet connection
+- Verify the URL is valid
+- Some platforms may have region restrictions
+- Try updating yt-dlp: `pip install -U yt-dlp` or `brew upgrade yt-dlp`
 
-External dependencies (must be installed):
-- `yt-dlp`: Video downloader backend
-- `ffmpeg`: Media processing tool
+### Slow Downloads
 
-## Limitations
+- Reduce concurrent downloads (configurable in code, default is 3)
+- Check your internet speed
+- Some platforms may throttle download speeds
 
-1. **Format Selection**: Currently uses profiles only; manual format selection not available
-3. **Error Handling**: Basic error display; detailed error recovery may need improvement
-3. **Concurrent Workers**: Fixed at 3 workers (configurable in code)
+## 🤝 Contributing
 
-## Future Enhancements
+Contributions are welcome! See [DEVELOPMENT.md](DEVELOPMENT.md) for technical details and development guidelines.
 
-Potential improvements:
+## 📄 License
 
-- [ ] Configurable download directory
-- [ ] Custom format selection UI
-- [ ] Download history persistence
-- [ ] Playlist support with queue management
-- [ ] Subtitle selection and management
-- [ ] Config file for user preferences
-- [ ] Better error messages and recovery
-- [ ] Download speed indicators
-- [ ] ETA calculation and display
-- [ ] Auto-update checking for newer versions
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## License
-
-This project is licensed under the MIT License.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
-
-## Acknowledgments
+## 🙏 Acknowledgments
 
 - Built with [Bubbletea](https://github.com/charmbracelet/bubbletea)
 - Powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp)
-- Uses [SponsorBlock](https://sponsor.ajay.app/) for YouTube ad removal
+- SponsorBlock integration via [SponsorBlock API](https://sponsor.ajay.app/)
 
+## 🔗 Links
+
+- [Report a Bug](https://github.com/Abhi1264/vidforge/issues)
+- [Request a Feature](https://github.com/Abhi1264/vidforge/issues)
+- [Development Guide](DEVELOPMENT.md)
+- [yt-dlp Documentation](https://github.com/yt-dlp/yt-dlp#readme)
+
+---
+
+Made with ❤️ by [Abhi1264](https://github.com/Abhi1264)
