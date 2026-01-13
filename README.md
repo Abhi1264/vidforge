@@ -3,9 +3,9 @@
 ![Go Version](https://img.shields.io/badge/go-1.25.5-blue.svg)
 ![GitHub Release](https://img.shields.io/github/v/release/Abhi1264/vidforge)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Homebrew](https://img.shields.io/homebrew/v/vidforge)
+[![Homebrew](https://img.shields.io/badge/homebrew-tap-orange.svg)](https://github.com/Abhi1264/homebrew-tap)
 
-VidForge is a beautiful terminal-based video downloader that supports 1000+ platforms including YouTube, Vimeo, Twitter, TikTok, and many more. Built with Go and powered by `yt-dlp`.
+VidForge is a beautiful terminal-based video downloader that supports 1000+ platforms including YouTube, Vimeo, Twitter, TikTok, and many more. Built with Go and powered by `yt-dlp` and `FFmpeg`.
 
 ![VidForge Demo](https://via.placeholder.com/800x400?text=VidForge+Demo)
 
